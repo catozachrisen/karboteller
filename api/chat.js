@@ -1,3 +1,8 @@
+// Oppdatert for CORS-støtte
+export default async function handler(req, res) {
+...
+
+
 export default async function handler(req, res) {
   // Legg til CORS-headere for å tillate forespørsler fra andre domener (som Wix)
   res.setHeader("Access-Control-Allow-Origin", "*");
