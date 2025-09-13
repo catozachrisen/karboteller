@@ -1,4 +1,13 @@
 export default async function handler(req, res) {
+  // 🔑 Legg til CORS-headere
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end(); // Svar OK på preflight
+  }
+
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Only POST allowed" });
   }
@@ -11,7 +20,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o",  // raskt og billig, kan byttes til gpt-4-turbo om ønskelig
+        model: "gpt-4o", // Du kan bruke gpt-3.5-turbo hvis du vil spare kostnad
         messages: req.body.messages,
       }),
     });
@@ -19,7 +28,7 @@ export default async function handler(req, res) {
     const data = await response.json();
     res.status(200).json(data);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Noe gikk galt på serveren" });
+    console.error("Feil i API:", error);
+    res.status(500).json({ error: "Noe gikk galt" });
   }
 }
